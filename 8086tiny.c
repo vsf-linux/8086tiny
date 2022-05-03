@@ -9,6 +9,10 @@
 #include <sys/timeb.h>
 #include <memory.h>
 
+#ifdef __VSF__
+#undef _WIN32
+#endif
+
 #ifndef _WIN32
 #include <unistd.h>
 #include <fcntl.h>
@@ -267,6 +271,8 @@ int main(int argc, char **argv)
 #endif
 	SDL_OpenAudio(&sdl_audio, 0);
 #endif
+
+	fcntl(0, F_SETFL, O_NONBLOCK);
 
 	// regs16 and reg8 point to F000:0, the start of memory-mapped registers. CS is initialised to F000
 	regs16 = (unsigned short *)(regs8 = mem + REGS_BASE);
